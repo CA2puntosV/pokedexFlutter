@@ -20,3 +20,5 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+//Falta corregir el botón para añadir nuevos pokemon y agregar los vistos en la ultima clase
