@@ -21,4 +21,4 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//Falta corregir el botón para añadir nuevos pokemon y agregar los vistos en la ultima clase
+//TODO crear el botón de añadir para todas las clases, crear el botón de filtros para las clases

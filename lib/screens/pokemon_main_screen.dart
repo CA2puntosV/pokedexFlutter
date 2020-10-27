@@ -200,11 +200,6 @@ class PokemonMainScreenState extends State<PokemonMainScreen> {
                         'https://wallpaperaccess.com/full/11914.jpg',
                       ),
                       TextFormField(
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'puto';
-                          }
-                        },
                         controller: nameController,
                         decoration: InputDecoration(
                           labelText: 'Ingresa el nombre',
@@ -230,6 +225,9 @@ class PokemonMainScreenState extends State<PokemonMainScreen> {
                         decoration:
                             InputDecoration(labelText: 'Ingresa la foto'),
                       ),
+                      SizedBox(
+                        height: 5,
+                      ),
                     ],
                   ),
                   actions: [
@@ -253,6 +251,21 @@ class PokemonMainScreenState extends State<PokemonMainScreen> {
                           );
                         } else if (pokemonRepository.nameExists(name)) {
                           errorController.text = 'Ya existe este nombre';
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text('Ya existe este nombre'),
+                            ),
+                          );
+                        } else if (pokemonRepository
+                            .numberExists(int.parse(number))) {
+                          errorController.text = 'Ya existe este número';
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text('Ya existe este número'),
+                            ),
+                          );
                         } else {
                           var pokemon = Pokemon(
                             name: name,

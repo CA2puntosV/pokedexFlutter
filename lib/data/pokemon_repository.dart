@@ -195,6 +195,10 @@ class PokemonRepository {
     return _POKEMON_LIST.any((pokemon) => pokemon.name == name);
   }
 
+  numberExists(int number) {
+    return _POKEMON_LIST.any((pokemon) => pokemon.number == number);
+  }
+
   update(Pokemon pokemon) {}
 
   delete(String id) {}
