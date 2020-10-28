@@ -202,28 +202,47 @@ class PokemonMainScreenState extends State<PokemonMainScreen> {
                       TextFormField(
                         controller: nameController,
                         decoration: InputDecoration(
+                          icon: Icon(Icons.trip_origin),
                           labelText: 'Ingresa el nombre',
+                          labelStyle: TextStyle(
+                            color: Colors.black,
+                          ),
                         ),
                         maxLength: 20,
                       ),
                       TextField(
                         controller: numberController,
-                        decoration:
-                            InputDecoration(labelText: 'Ingresa el número'),
+                        decoration: InputDecoration(
+                          icon: Icon(Icons.linear_scale),
+                          labelText: 'Ingresa el número',
+                          labelStyle: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
                         maxLength: 4,
                         maxLengthEnforced: true,
                         keyboardType: TextInputType.number,
                       ),
                       TextField(
                         controller: typeController,
-                        decoration:
-                            InputDecoration(labelText: 'Ingresa el tipo'),
+                        decoration: InputDecoration(
+                          icon: Icon(Icons.category),
+                          labelText: 'Ingresa el tipo',
+                          labelStyle: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
                         maxLength: 15,
                       ),
                       TextField(
                         controller: photoController,
-                        decoration:
-                            InputDecoration(labelText: 'Ingresa la foto'),
+                        decoration: InputDecoration(
+                          icon: Icon(Icons.fullscreen),
+                          labelText: 'Ingresa la foto',
+                          labelStyle: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
                       ),
                       SizedBox(
                         height: 5,
@@ -231,6 +250,15 @@ class PokemonMainScreenState extends State<PokemonMainScreen> {
                     ],
                   ),
                   actions: [
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop('Cancelar');
+                      },
+                      child: Text(
+                        'Cancelar',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
                     FlatButton(
                       onPressed: () {
                         final name = nameController.text;
@@ -266,6 +294,14 @@ class PokemonMainScreenState extends State<PokemonMainScreen> {
                               title: Text('Ya existe este número'),
                             ),
                           );
+                        } else if (pokemonRepository.photoExists(photo)) {
+                          errorController.text = 'Ya existe esta foto';
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text('Ya existe esta foto'),
+                            ),
+                          );
                         } else {
                           var pokemon = Pokemon(
                             name: name,
@@ -278,7 +314,10 @@ class PokemonMainScreenState extends State<PokemonMainScreen> {
                           setState(() {});
                         }
                       },
-                      child: Text('Guardar'),
+                      child: Text(
+                        'Guardar',
+                        style: TextStyle(color: Colors.black),
+                      ),
                     ),
                   ],
                 );

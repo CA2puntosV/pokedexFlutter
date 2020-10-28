@@ -21,4 +21,4 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//TODO crear el botón de añadir para todas las clases, crear el botón de filtros para las clases
+//TODO Crear el botón de filtros para las clases, implemetar boton de crear iconos en las demas clases.

@@ -191,6 +191,8 @@ class PokemonRepository {
     return Pokemon();
   }
 
+//Si se repite
+
   nameExists(String name) {
     return _POKEMON_LIST.any((pokemon) => pokemon.name == name);
   }
@@ -198,6 +200,12 @@ class PokemonRepository {
   numberExists(int number) {
     return _POKEMON_LIST.any((pokemon) => pokemon.number == number);
   }
+
+  photoExists(String photoUrl) {
+    return _POKEMON_LIST.any((pokemon) => pokemon.photoUrl == photoUrl);
+  }
+
+//
 
   update(Pokemon pokemon) {}
 
