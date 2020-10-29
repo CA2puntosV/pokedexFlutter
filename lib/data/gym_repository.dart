@@ -37,17 +37,15 @@ class GymRepository {
     if (order != null) {
       switch (order) {
         case 1:
-          _GYM_LIST.sort((pokeA, pokeB) => pokeA.name.compareTo(pokeB.name));
+          _GYM_LIST.sort((gymA, gymB) => gymA.name.compareTo(gymB.name));
           break;
         case 2:
-          _GYM_LIST
-              .sort((pokeA, pokeB) => pokeA.region.compareTo(pokeB.region));
+          _GYM_LIST.sort((gymA, gymB) => gymA.region.compareTo(gymB.region));
           break;
         case 3:
-          _GYM_LIST.sort((pokeA, pokeB) => pokeA.lider.compareTo(pokeB.lider));
+          _GYM_LIST.sort((gymA, gymB) => gymA.lider.compareTo(gymB.lider));
           break;
       }
-      return result;
     }
 
     if (limit != null) {

@@ -143,7 +143,7 @@ class GymMainScreenState extends State<GymMainScreen> {
                                               },
                                             ),
                                             RadioListTile(
-                                              title: Text('Por tipo'),
+                                              title: Text('Por región'),
                                               value: 2,
                                               groupValue: orderSelected,
                                               onChanged: (value) {
@@ -152,7 +152,7 @@ class GymMainScreenState extends State<GymMainScreen> {
                                               },
                                             ),
                                             RadioListTile(
-                                              title: Text('Por número'),
+                                              title: Text('Por líder'),
                                               value: 3,
                                               groupValue: orderSelected,
                                               onChanged: (value) {
