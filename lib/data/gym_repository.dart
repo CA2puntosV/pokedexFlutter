@@ -31,7 +31,49 @@ class GymRepository {
     ),
   ];
 
-  List<Gym> getAll() {
-    return _GYM_LIST;
+  List<Gym> getAll({int limit, int order}) {
+    var result = _GYM_LIST;
+
+    if (order != null) {
+      switch (order) {
+        case 1:
+          _GYM_LIST.sort((pokeA, pokeB) => pokeA.name.compareTo(pokeB.name));
+          break;
+        case 2:
+          _GYM_LIST
+              .sort((pokeA, pokeB) => pokeA.region.compareTo(pokeB.region));
+          break;
+        case 3:
+          _GYM_LIST.sort((pokeA, pokeB) => pokeA.lider.compareTo(pokeB.lider));
+          break;
+      }
+      return result;
+    }
+
+    if (limit != null) {
+      limit = limit > _GYM_LIST.length ? _GYM_LIST.length : limit;
+
+      result = _GYM_LIST.sublist(0, limit);
+    }
+
+    return result;
   }
+
+  create(Gym gym) {
+    return Gym();
+  }
+
+  //Si se repite
+
+  nameExists(String name) {
+    return _GYM_LIST.any((gym) => gym.name == name);
+  }
+
+  photoExists(String photoUrl) {
+    return _GYM_LIST.any((gym) => gym.PhotoUrl == photoUrl);
+  }
+
+  update(Gym gym) {}
+
+  delete(String id) {}
 }

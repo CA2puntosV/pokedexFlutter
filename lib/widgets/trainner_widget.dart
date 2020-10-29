@@ -12,12 +12,12 @@ class TrainerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.all(8.8),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Image.network(
-            trainer.TphotoUrl,
+            trainer.tphotoUrl,
             height: 150,
           ),
           SizedBox(
@@ -30,7 +30,7 @@ class TrainerWidget extends StatelessWidget {
               ),
             ),
             child: Text(
-              '${trainer.Tname}',
+              '${trainer.tname}',
               style: TextStyle(
                 fontSize: 20,
                 color: Color(0xffffe137),

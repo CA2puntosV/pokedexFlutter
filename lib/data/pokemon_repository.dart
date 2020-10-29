@@ -179,8 +179,33 @@ class PokemonRepository {
     )
   ];
 
-  List<Pokemon> getAll() {
-    return _POKEMON_LIST;
+  List<Pokemon> getAll({int limit, int order}) {
+    var result = _POKEMON_LIST;
+
+    if (order != null) {
+      switch (order) {
+        case 1:
+          _POKEMON_LIST
+              .sort((pokeA, pokeB) => pokeA.name.compareTo(pokeB.name));
+          break;
+        case 2:
+          _POKEMON_LIST
+              .sort((pokeA, pokeB) => pokeA.type.compareTo(pokeB.type));
+          break;
+        case 3:
+          _POKEMON_LIST
+              .sort((pokeA, pokeB) => pokeA.number.compareTo(pokeB.number));
+          break;
+      }
+    }
+
+    if (limit != null) {
+      limit = limit > _POKEMON_LIST.length ? _POKEMON_LIST.length : limit;
+
+      result = _POKEMON_LIST.sublist(0, limit);
+    }
+
+    return result;
   }
 
   create(Pokemon pokemon) {

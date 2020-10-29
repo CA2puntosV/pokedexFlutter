@@ -1,12 +1,12 @@
 class Trainer {
-  String TphotoUrl;
-  String Tname;
+  String tphotoUrl;
+  String tname;
   String town;
   String gender;
 
   Trainer({
-    this.TphotoUrl,
-    this.Tname,
+    this.tphotoUrl,
+    this.tname,
     this.town,
     this.gender,
   });

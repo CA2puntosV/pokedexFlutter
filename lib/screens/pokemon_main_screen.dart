@@ -3,6 +3,7 @@ import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/widgets/pokemon_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PokemonMainScreen extends StatefulWidget {
   @override
@@ -10,9 +11,12 @@ class PokemonMainScreen extends StatefulWidget {
 }
 
 class PokemonMainScreenState extends State<PokemonMainScreen> {
+  final pokemonRepository = PokemonRepository();
+  var showMenu = false;
+  var limit;
+  var order;
+  @override
   Widget build(BuildContext context) {
-    final pokemonRepository = PokemonRepository();
-
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -169,161 +173,282 @@ class PokemonMainScreenState extends State<PokemonMainScreen> {
         body: SingleChildScrollView(
           child: Wrap(
             children: pokemonRepository
-                .getAll()
+                .getAll(limit: limit, order: order)
                 .map(
                   (pokemon) => PokemonWidget(pokemon: pokemon),
                 )
                 .toList(),
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Color(0xffffe137),
-          child: Icon(Icons.add),
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                final nameController = TextEditingController();
-                final numberController = TextEditingController();
-                final photoController = TextEditingController();
-                final typeController = TextEditingController();
-                final errorController = TextEditingController();
+        floatingActionButton: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedSwitcher(
+              duration: Duration(milliseconds: 700),
+              child: !showMenu
+                  ? SizedBox()
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        FloatingActionButton(
+                          backgroundColor: Color(0xffffe137),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                final limitController = TextEditingController();
+                                limitController.text = '${limit ?? 0}';
+                                var orderSelected = order;
+                                return AlertDialog(
+                                  title: Text('Filtro'),
+                                  content: ListView(
+                                    shrinkWrap: true,
+                                    children: [
+                                      TextField(
+                                        decoration: InputDecoration(
+                                            hintText: 'Límite Máximo'),
+                                        controller: limitController,
+                                        keyboardType: TextInputType.number,
+                                      ),
+                                      StatefulBuilder(
+                                          builder: (context, setStateTwo) {
+                                        return Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            RadioListTile(
+                                              title: Text('Por nombre'),
+                                              value: 1,
+                                              groupValue: orderSelected,
+                                              onChanged: (value) {
+                                                orderSelected = value;
+                                                setStateTwo(() {});
+                                              },
+                                            ),
+                                            RadioListTile(
+                                              title: Text('Por tipo'),
+                                              value: 2,
+                                              groupValue: orderSelected,
+                                              onChanged: (value) {
+                                                orderSelected = value;
+                                                setStateTwo(() {});
+                                              },
+                                            ),
+                                            RadioListTile(
+                                              title: Text('Por número'),
+                                              value: 3,
+                                              groupValue: orderSelected,
+                                              onChanged: (value) {
+                                                orderSelected = value;
+                                                setStateTwo(() {});
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      }),
+                                      FlatButton(
+                                        color: Color(0xffffe137),
+                                        onPressed: () {
+                                          limit = limitController.text.isEmpty
+                                              ? null
+                                              : int.parse(limitController.text);
+                                          order = orderSelected;
+                                          Navigator.pop(context);
+                                          setState(() {});
+                                        },
+                                        child: Text('Filtrar'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: Icon(FontAwesomeIcons.filter),
+                        ),
+                        SizedBox(
+                          width: 3,
+                        ),
+                        FloatingActionButton(
+                          backgroundColor: Color(0xffffe137),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                final nameController = TextEditingController();
+                                final numberController =
+                                    TextEditingController();
+                                final photoController = TextEditingController();
+                                final typeController = TextEditingController();
+                                final errorController = TextEditingController();
 
-                return AlertDialog(
-                  title: Text(
-                    'Añadir Pokemon',
-                  ),
-                  content: ListView(
-                    shrinkWrap: true,
-                    children: [
-                      Image.network(
-                        'https://wallpaperaccess.com/full/11914.jpg',
-                      ),
-                      TextFormField(
-                        controller: nameController,
-                        decoration: InputDecoration(
-                          icon: Icon(Icons.trip_origin),
-                          labelText: 'Ingresa el nombre',
-                          labelStyle: TextStyle(
-                            color: Colors.black,
-                          ),
-                        ),
-                        maxLength: 20,
-                      ),
-                      TextField(
-                        controller: numberController,
-                        decoration: InputDecoration(
-                          icon: Icon(Icons.linear_scale),
-                          labelText: 'Ingresa el número',
-                          labelStyle: TextStyle(
-                            color: Colors.black,
-                          ),
-                        ),
-                        maxLength: 4,
-                        maxLengthEnforced: true,
-                        keyboardType: TextInputType.number,
-                      ),
-                      TextField(
-                        controller: typeController,
-                        decoration: InputDecoration(
-                          icon: Icon(Icons.category),
-                          labelText: 'Ingresa el tipo',
-                          labelStyle: TextStyle(
-                            color: Colors.black,
-                          ),
-                        ),
-                        maxLength: 15,
-                      ),
-                      TextField(
-                        controller: photoController,
-                        decoration: InputDecoration(
-                          icon: Icon(Icons.fullscreen),
-                          labelText: 'Ingresa la foto',
-                          labelStyle: TextStyle(
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                    ],
-                  ),
-                  actions: [
-                    FlatButton(
-                      onPressed: () {
-                        Navigator.of(context).pop('Cancelar');
-                      },
-                      child: Text(
-                        'Cancelar',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
-                    FlatButton(
-                      onPressed: () {
-                        final name = nameController.text;
-                        final number = numberController.text;
-                        final type = typeController.text;
-                        final photo = photoController.text;
+                                return AlertDialog(
+                                  title: Text(
+                                    'Añadir Pokemon',
+                                  ),
+                                  content: ListView(
+                                    shrinkWrap: true,
+                                    children: [
+                                      Image.network(
+                                        'https://fotosparafacebook.es/wp-content/uploads/2016/07/pokemon-portadas-para-facebook-Fotosparafacebook.es-4.png',
+                                      ),
+                                      TextFormField(
+                                        controller: nameController,
+                                        decoration: InputDecoration(
+                                          icon: Icon(FontAwesomeIcons.bullseye),
+                                          labelText:
+                                              'Ingresa el nombre del Pokemon',
+                                          labelStyle: TextStyle(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        maxLength: 20,
+                                      ),
+                                      TextField(
+                                        controller: numberController,
+                                        decoration: InputDecoration(
+                                          icon: Icon(Icons.linear_scale),
+                                          labelText: 'Ingresa el número',
+                                          labelStyle: TextStyle(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        maxLength: 4,
+                                        maxLengthEnforced: true,
+                                        keyboardType: TextInputType.number,
+                                      ),
+                                      TextField(
+                                        controller: typeController,
+                                        decoration: InputDecoration(
+                                          icon:
+                                              Icon(FontAwesomeIcons.angellist),
+                                          labelText: 'Ingresa el tipo',
+                                          labelStyle: TextStyle(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        maxLength: 15,
+                                      ),
+                                      TextField(
+                                        controller: photoController,
+                                        decoration: InputDecoration(
+                                          icon: Icon(FontAwesomeIcons.image),
+                                          labelText: 'Ingresa la foto',
+                                          labelStyle: TextStyle(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                    ],
+                                  ),
+                                  actions: [
+                                    FlatButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop('Cancelar');
+                                      },
+                                      child: Text(
+                                        'Cancelar',
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ),
+                                    FlatButton(
+                                      onPressed: () {
+                                        final name = nameController.text;
+                                        final number = numberController.text;
+                                        final type = typeController.text;
+                                        final photo = photoController.text;
 
-                        if (name.isEmpty ||
-                            number.isEmpty ||
-                            photo.isEmpty ||
-                            type.isEmpty) {
-                          errorController.text = 'No puede dejar campos vacíos';
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text('No puede dejar campos vacíos'),
-                            ),
-                          );
-                        } else if (pokemonRepository.nameExists(name)) {
-                          errorController.text = 'Ya existe este nombre';
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text('Ya existe este nombre'),
-                            ),
-                          );
-                        } else if (pokemonRepository
-                            .numberExists(int.parse(number))) {
-                          errorController.text = 'Ya existe este número';
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text('Ya existe este número'),
-                            ),
-                          );
-                        } else if (pokemonRepository.photoExists(photo)) {
-                          errorController.text = 'Ya existe esta foto';
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text('Ya existe esta foto'),
-                            ),
-                          );
-                        } else {
-                          var pokemon = Pokemon(
-                            name: name,
-                            number: int.parse(number),
-                            type: type,
-                            photoUrl: photo,
-                          );
-                          pokemonRepository.create(pokemon);
-                          Navigator.pop(context);
-                          setState(() {});
-                        }
-                      },
-                      child: Text(
-                        'Guardar',
-                        style: TextStyle(color: Colors.black),
-                      ),
+                                        if (name.isEmpty ||
+                                            number.isEmpty ||
+                                            photo.isEmpty ||
+                                            type.isEmpty) {
+                                          errorController.text =
+                                              'No puede dejar campos vacíos';
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                              title: Text(
+                                                  'No puede dejar campos vacíos'),
+                                            ),
+                                          );
+                                        } else if (pokemonRepository
+                                            .nameExists(name)) {
+                                          errorController.text =
+                                              'Ya existe este nombre';
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                              title:
+                                                  Text('Ya existe este nombre'),
+                                            ),
+                                          );
+                                        } else if (pokemonRepository
+                                            .numberExists(int.parse(number))) {
+                                          errorController.text =
+                                              'Ya existe este número';
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                              title:
+                                                  Text('Ya existe este número'),
+                                            ),
+                                          );
+                                        } else if (pokemonRepository
+                                            .photoExists(photo)) {
+                                          errorController.text =
+                                              'Ya existe esta foto';
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                              title:
+                                                  Text('Ya existe esta foto'),
+                                            ),
+                                          );
+                                        } else {
+                                          var pokemon = Pokemon(
+                                            name: name,
+                                            number: int.parse(number),
+                                            type: type,
+                                            photoUrl: photo,
+                                          );
+                                          pokemonRepository.create(pokemon);
+                                          Navigator.pop(context);
+                                          setState(() {});
+                                        }
+                                      },
+                                      child: Text(
+                                        'Guardar',
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: Icon(FontAwesomeIcons.plus),
+                        ),
+                      ],
                     ),
-                  ],
-                );
+            ),
+            SizedBox(
+              width: 3,
+            ),
+            FloatingActionButton(
+              backgroundColor: Colors.red,
+              child: Icon(!showMenu
+                  ? FontAwesomeIcons.arrowLeft
+                  : FontAwesomeIcons.arrowRight),
+              onPressed: () {
+                showMenu = !showMenu;
+
+                setState(() {});
               },
-            );
-          },
+            ),
+          ],
         ),
       ),
     );

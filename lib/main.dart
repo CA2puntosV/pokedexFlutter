@@ -21,4 +21,5 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//TODO Crear el botón de filtros para las clases, implemetar boton de crear iconos en las demas clases.
+//TODO organizar, modificar e implementar el drawer
+//TODO agregar triki
